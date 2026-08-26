@@ -41,9 +41,7 @@
             {% assign displayed = displayed | plus: 1 %}
             {% assign parts = line | split: "|" %}
             {% assign item_name = parts[0] | strip | remove: "[ ]" | remove: "[x]" | remove: "[X]" | strip %}
-            {% assign item_category = parts[1] | default: "Someday" | strip %}
-            {% assign item_note = parts[2] | default: "" | strip %}
-            <div class="item"><div class="meta"><span class="index">{% if is_done %}x{% else %}-{% endif %}</span></div><div class="content"><span class="description description--small">{{ item_name }} | {{ item_category }}{% if item_note != "" %} | {{ item_note }}{% endif %}</span></div></div>
+            <div class="item"><div class="meta"><span class="index">{% if is_done %}x{% else %}-{% endif %}</span></div><div class="content"><span class="description description--small">{{ item_name }}</span></div></div>
           {% endif %}
         {% endif %}
       {% endfor %}

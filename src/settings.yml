@@ -48,7 +48,7 @@ custom_fields:
   name: Bucket List Items
   field_type: text
   rows: 12
-  description: 'One item per line. Format: [ ] Title | Category | Note. Use [x] for completed items. Plain titles also work.'
+  description: "Format: [ ] Title | Category | Note (all parts optional). Examples: '[ ] Learn Italian | Skills | Someday' or just 'Read more books'. Use [x] for completed items."
   default: |
     [ ] See the northern lights | Travel | Winter trip idea
     [x] Build a home server | Projects | Done

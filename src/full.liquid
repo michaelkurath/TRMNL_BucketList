@@ -30,7 +30,7 @@
   {% if total == 0 %}
     <div class="flex flex--col flex--center-x flex--center-y w--full h--full"><span class="value value--xxxlarge text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="340">Add your first item</span></div>
   {% elsif mode contains "list" %}
-    <div class="grid grid--cols-2 gap stretch-x w--full">
+    <div class="grid grid--cols-2 portrait:grid--cols-1 gap stretch-x w--full">
       {% assign displayed = 0 %}
       {% for raw in lines %}
         {% assign line = raw | strip %}
@@ -49,7 +49,7 @@
       {% endfor %}
     </div>
   {% else %}
-    <div class="flex flex--col flex--center-x flex--center-y w--full h--full"><span class="value value--tera text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="360">{% if open == 0 %}All items completed{% else %}{{ focus_name }}{% endif %}</span></div>
+    <div class="flex flex--col flex--center-x flex--center-y w--full h--full"><span class="value value--mega lg:value--tera text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="360">{% if open == 0 %}All items completed{% else %}{{ focus_name }}{% endif %}</span></div>
   {% endif %}
 </div>
 
