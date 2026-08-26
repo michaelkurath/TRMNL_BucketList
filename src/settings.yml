@@ -37,6 +37,7 @@ custom_fields:
   category: custom,personal
   description: A quiet e-ink reminder for the dreams, places, projects and experiences you still want to make real. Show one open item for daily focus, or a simple list when you want the bigger picture.
   email_address: michael.kurath@gmail.com
+  learn_more_url: https://github.com/michaelkurath/TRMNL_BucketList
 - keyname: list_title
   name: Title
   field_type: string
@@ -79,5 +80,5 @@ custom_fields:
   description: Used in List mode.
   optional: true
 name: Bucket List
-description: ''
+description: Dreams and goals at a glance
 refresh_interval: 15

@@ -1,19 +1,59 @@
-# Bucket List
+# TRMNL Bucket List
 
-A [TRMNL](https://trmnl.com) plugin for ePaper displays, connected by
-[GitHub Sync](https://help.trmnl.com/en/articles/15977899-github-sync): every save in TRMNL lands here as a commit.
+An unofficial, open-source [TRMNL](https://trmnl.com/) recipe that keeps personal goals, dreams, places, projects, and experiences visible on an e-ink display.
 
-<img width="150" alt="image" src="https://trmnl.com/images/brand/badges/light/works-with-trmnl/trmnl-badge-works-with-light.svg" />
+<img width="150" alt="Works with TRMNL" src="https://trmnl.com/images/brand/badges/light/works-with-trmnl/trmnl-badge-works-with-light.svg" />
 
-### Develop locally
+## Features
 
-Templates and settings live in [`src/`](src/), ready for [trmnlp](https://github.com/usetrmnl/trmnlp):
+- Focus mode highlights one random open item
+- List mode shows several open and completed items
+- Optional completed-item visibility
+- Configurable list length
+- Full-screen, half-horizontal, half-vertical, and quadrant layouts
+- Static recipe with no external service or account dependency
+- MIT-licensed source code
+
+## Item format
+
+Enter one item per line in the recipe settings:
+
+```text
+[ ] See the northern lights | Travel | Winter trip idea
+[x] Build a home server | Projects | Done
+[ ] Visit Japan | Travel | Food, trains, design
+```
+
+The category and note are optional. Use `[x]` for completed items and `[ ]` for open items. Plain titles also work.
+
+## Repository structure
+
+```text
+src/
+  full.liquid            Full-screen layout
+  half_horizontal.liquid Horizontal half-screen layout
+  half_vertical.liquid   Vertical half-screen layout
+  quadrant.liquid        Quadrant layout
+  settings.yml           TRMNL recipe configuration
+```
+
+## Development
+
+Templates and settings in [`src/`](./src/) can be previewed locally with [trmnlp](https://github.com/usetrmnl/trmnlp):
 
 ```sh
 gem install trmnl_preview
 trmnlp serve
 ```
 
-### Discoverability
+Preview all four layouts and test both display modes before submitting changes. TRMNL layouts must not be nested; use flex, grid, or columns inside the outer `.layout` container.
 
-Add the `trmnl` topic to this repo so other TRMNL plugin builders can find it.
+## Contributing
+
+Bug reports and focused improvements are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pull request.
+
+## License
+
+The software and templates in this repository are available under the [MIT License](./LICENSE).
+
+TRMNL and its associated names and trademarks remain the property of their respective owners. This repository is an independent community project and is not affiliated with or endorsed by TRMNL.
