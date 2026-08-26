@@ -62,7 +62,7 @@ custom_fields:
   options:
   - focus
   - list
-  default: 'focus'
+  default: focus
   description: Focus shows one random open item. List shows several items.
   optional: true
 - keyname: show_completed
