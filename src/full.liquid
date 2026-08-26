@@ -1,0 +1,55 @@
+{% assign settings = trmnl.plugin_settings.custom_fields_values %}
+{% assign title = settings.list_title | default: "Bucket List" %}
+{% assign raw_items = settings.bucket_items | default: "" %}
+{% assign lines = raw_items | newline_to_br | split: "<br />" %}
+{% assign mode = settings.display_mode | default: "focus" | downcase %}
+{% assign show_completed = settings.show_completed | default: "true" | downcase %}
+{% assign item_limit = settings.max_items | default: "7" | plus: 0 %}
+{% if item_limit <= 0 %}{% assign item_limit = 7 %}{% endif %}
+{% assign total = 0 %}
+{% assign open = 0 %}
+{% assign pending_pool = "" %}
+
+{% for raw in lines %}
+  {% assign line = raw | strip %}
+  {% if line != "" %}
+    {% assign total = total | plus: 1 %}
+    {% assign is_done = false %}
+    {% if line contains "[x]" or line contains "[X]" %}{% assign is_done = true %}{% endif %}
+    {% unless is_done %}{% assign open = open | plus: 1 %}{% assign pending_pool = pending_pool | append: line | append: "||" %}{% endunless %}
+  {% endif %}
+{% endfor %}
+
+{% assign focus_line = pending_pool | split: "||" | sample | strip %}
+{% assign focus_parts = focus_line | split: "|" %}
+{% assign focus_name = focus_parts[0] | strip | remove: "[ ]" | remove: "[x]" | remove: "[X]" | strip %}
+{% if mode contains "list" %}{% assign active_mode = "List" %}{% else %}{% assign active_mode = "Focus" %}{% endif %}
+
+<div class="layout layout--col layout--stretch">
+  {% if total == 0 %}
+    <div class="layout layout--center layout--stretch"><span class="value value--xxxlarge text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="340">Add your first item</span></div>
+  {% elsif mode contains "list" %}
+    <div class="layout layout--center-y w--full"><div class="grid grid--cols-2 gap stretch-x">
+      {% assign displayed = 0 %}
+      {% for raw in lines %}
+        {% assign line = raw | strip %}
+        {% if line != "" and displayed < item_limit %}
+          {% assign is_done = false %}{% if line contains "[x]" or line contains "[X]" %}{% assign is_done = true %}{% endif %}
+          {% assign should_show = "true" %}{% if is_done and show_completed == "false" %}{% assign should_show = "false" %}{% endif %}
+          {% if should_show == "true" %}
+            {% assign displayed = displayed | plus: 1 %}
+            {% assign parts = line | split: "|" %}
+            {% assign item_name = parts[0] | strip | remove: "[ ]" | remove: "[x]" | remove: "[X]" | strip %}
+            {% assign item_category = parts[1] | default: "Someday" | strip %}
+            {% assign item_note = parts[2] | default: "" | strip %}
+            <div class="item"><div class="meta"><span class="index">{% if is_done %}x{% else %}-{% endif %}</span></div><div class="content"><span class="title title--small">{{ item_name }}</span><span class="description description--small">{{ item_category }}{% if item_note != "" %} | {{ item_note }}{% endif %}</span></div></div>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div></div>
+  {% else %}
+    <div class="layout layout--center layout--center-x layout--center-y w--full h--full"><span class="value value--tera text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="360">{% if open == 0 %}All items completed{% else %}{{ focus_name }}{% endif %}</span></div>
+  {% endif %}
+</div>
+
+<div class="title_bar"><span class="title">{{ title }}</span><span class="instance">{{ active_mode }}</span></div>
