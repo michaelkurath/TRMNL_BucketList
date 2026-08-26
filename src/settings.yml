@@ -1,0 +1,86 @@
+---
+strategy: static
+no_screen_padding: 'no'
+dark_mode: 'no'
+static_data: "{}"
+polling_verb: get
+framework_version: 3.1.1
+serverless_language: ''
+polling_url: ''
+polling_headers: ''
+polling_body: ''
+id: 322134
+oauth_enabled: 'false'
+oauth_pkce_enabled: 'no'
+oauth_authorize_url: ''
+oauth_token_url: ''
+oauth_scopes: ''
+oauth_scope_separator: ''
+oauth_refresh_url: ''
+oauth_auth_params: ''
+oauth_token_headers: ''
+oauth_token_site: ''
+oauth_token_params: ''
+oauth_token_request_auth_method: ''
+oauth_body_format: ''
+oauth_token_response_metadata: ''
+oauth_authorization_method: ''
+oauth_refresh_params: ''
+oauth_token_field_name: ''
+oauth_expiry_field_name: ''
+oauth_expiry_strategy: ''
+oauth_fixed_expiry_ms: ''
+custom_fields:
+- keyname: author_bio
+  field_type: author_bio
+  name: About This Plugin
+  category: custom,personal
+  description: A quiet e-ink reminder for the dreams, places, projects and experiences you still want to make real. Show one open item for daily focus, or a simple list when you want the bigger picture.
+  email_address: michael.kurath@gmail.com
+- keyname: list_title
+  name: Title
+  field_type: string
+  default: Bucket List
+  description: Main title shown on the screen.
+  optional: true
+- keyname: bucket_items
+  name: Bucket List Items
+  field_type: text
+  rows: 12
+  description: 'One item per line. Format: [ ] Title | Category | Note. Use [x] for completed items. Plain titles also work.'
+  default: |
+    [ ] See the northern lights | Travel | Winter trip idea
+    [x] Build a home server | Projects | Done
+    [ ] Visit Japan | Travel | Food, trains, design
+    [ ] Learn Italian | Skills | Someday
+    [ ] Sleep in a mountain hut | Experiences | Weekend idea
+  optional: true
+- keyname: display_mode
+  name: Display Mode
+  field_type: select
+  options:
+  - Focus
+  - List
+  default: focus
+  description: Focus shows one random open item. List shows several items.
+  optional: true
+- keyname: show_completed
+  name: Show completed items in lists?
+  field_type: select
+  options:
+  - 'true'
+  - 'false'
+  default: 'true'
+  optional: true
+- keyname: max_items
+  name: Max list items
+  field_type: number
+  min: 3
+  max: 12
+  step: 1
+  default: 7
+  description: Used in List mode.
+  optional: true
+name: Bucket List
+description:
+refresh_interval: 15
