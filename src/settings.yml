@@ -79,5 +79,5 @@ custom_fields:
   description: Used in List mode.
   optional: true
 name: Bucket List
-description:
+description: ''
 refresh_interval: 15
