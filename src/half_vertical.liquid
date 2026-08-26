@@ -21,9 +21,14 @@
   {% endif %}
 {% endfor %}
 
+{% comment %}sample chooses a new open item whenever TRMNL renders the recipe.{% endcomment %}
 {% assign focus_line = pending_pool | split: "||" | sample | strip %}
-{% assign focus_parts = focus_line | split: "|" %}
-{% assign focus_name = focus_parts[0] | strip | remove: "[ ]" | remove: "[x]" | remove: "[X]" | strip %}
+{% if focus_line == empty or focus_line == "" %}
+  {% assign focus_name = "Add your first item" %}
+{% else %}
+  {% assign focus_parts = focus_line | split: "|" %}
+  {% assign focus_name = focus_parts[0] | strip | remove: "[ ]" | remove: "[x]" | remove: "[X]" | strip %}
+{% endif %}
 {% if mode contains "list" %}{% assign active_mode = "List" %}{% else %}{% assign active_mode = "Focus" %}{% endif %}
 
 <div class="layout layout--col layout--stretch">

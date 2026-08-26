@@ -60,9 +60,9 @@ custom_fields:
   name: Display Mode
   field_type: select
   options:
-  - Focus
-  - List
-  default: focus
+  - focus
+  - list
+  default: 'focus'
   description: Focus shows one random open item. List shows several items.
   optional: true
 - keyname: show_completed
