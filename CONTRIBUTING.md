@@ -23,4 +23,4 @@ Thanks for helping improve the TRMNL Bucket List recipe.
 
 Open a GitHub issue with the affected layout, TRMNL device or resolution, selected display mode, relevant settings, a screenshot if possible, and clear reproduction steps. Remove personal bucket-list content before sharing screenshots or examples.
 
-By contributing, you agree that your contribution may be distributed under the project's MIT License.
+By contributing, you agree that your contribution may be distributed under the project's Creative Commons Attribution 4.0 International License (CC BY 4.0).

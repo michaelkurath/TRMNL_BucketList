@@ -12,7 +12,7 @@ An unofficial, open-source [TRMNL](https://trmnl.com/) recipe that keeps persona
 - Configurable list length
 - Full-screen, half-horizontal, half-vertical, and quadrant layouts
 - Static recipe with no external service or account dependency
-- MIT-licensed source code
+- Licensed for sharing and adaptation under CC BY 4.0
 
 ## Item format
 
@@ -52,8 +52,10 @@ Preview all four layouts and test both display modes before submitting changes. 
 
 Bug reports and focused improvements are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pull request.
 
-## License
+## License and attribution
 
-The software and templates in this repository are available under the [MIT License](./LICENSE).
+The original visual design, data parsing logic, markup, and other original content in this repository are licensed under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](./LICENSE), in accordance with the [TRMNL Community Plugin License](https://trmnl.com/plugin-license).
+
+When sharing or adapting the recipe, credit Michael Kurath, link to this repository and the CC BY 4.0 license, and indicate whether changes were made.
 
 TRMNL and its associated names and trademarks remain the property of their respective owners. This repository is an independent community project and is not affiliated with or endorsed by TRMNL.
