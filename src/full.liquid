@@ -3,13 +3,15 @@
 {% assign raw_items = settings.bucket_items | default: "" %}
 {% assign lines = raw_items | newline_to_br | split: "<br />" %}
 {% assign mode = settings.display_mode | default: "focus" | downcase %}
+{% assign show_completed_value = settings.show_completed | append: "" | strip | downcase %}
 {% assign hide_completed = false %}
-{% if settings.show_completed == false or settings.show_completed == "false" %}{% assign hide_completed = true %}{% endif %}
+{% if settings.show_completed == false or show_completed_value == "false" or show_completed_value == "0" or show_completed_value == "no" or show_completed_value == "off" %}{% assign hide_completed = true %}{% endif %}
 {% assign item_limit = settings.max_items | default: "7" | plus: 0 %}
 {% if item_limit <= 0 %}{% assign item_limit = 7 %}{% endif %}
 {% assign total = 0 %}
 {% assign open = 0 %}
 {% assign pending_pool = "" %}
+{% assign focus_count = 0 %}
 
 {% for raw in lines %}
   {% assign line = raw | strip %}
@@ -17,7 +19,11 @@
     {% assign total = total | plus: 1 %}
     {% assign is_done = false %}
     {% if line contains "[x]" or line contains "[X]" %}{% assign is_done = true %}{% endif %}
-    {% unless is_done %}{% assign open = open | plus: 1 %}{% assign pending_pool = pending_pool | append: line | append: "||" %}{% endunless %}
+    {% unless is_done %}{% assign open = open | plus: 1 %}{% endunless %}
+    {% if is_done == false or hide_completed == false %}
+      {% assign pending_pool = pending_pool | append: line | append: "||" %}
+      {% assign focus_count = focus_count | plus: 1 %}
+    {% endif %}
   {% endif %}
 {% endfor %}
 
@@ -54,7 +60,7 @@
       {% endfor %}
     </div>
   {% else %}
-    <div class="flex flex--col flex--center-x flex--center-y w--full h--full"><span class="value value--mega lg:value--tera text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="360">{% if open == 0 %}All items completed{% else %}{{ focus_name }}{% endif %}</span></div>
+    <div class="flex flex--col flex--center-x flex--center-y w--full h--full"><span class="value value--mega lg:value--tera text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="360">{% if focus_count == 0 %}All items completed{% else %}{{ focus_name }}{% endif %}</span></div>
   {% endif %}
 </div>
 
