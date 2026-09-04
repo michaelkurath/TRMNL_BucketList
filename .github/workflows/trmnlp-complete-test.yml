@@ -18,7 +18,9 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Lint with TRMNLP
-        run: docker run --rm --pull always --volume "$PWD:/plugin" trmnl/trmnlp lint
+        run: |
+          printf '%s\n' '---' 'watch: false' 'custom_fields: {}' 'transform_runtime: disabled' > .trmnlp.yml
+          docker run --rm --pull always --volume "$PWD:/plugin" trmnl/trmnlp lint
 
       - name: Run semantic and visual tests
         shell: bash
