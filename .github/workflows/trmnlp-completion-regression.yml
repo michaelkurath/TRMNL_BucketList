@@ -1,0 +1,139 @@
+name: TRMNLP Completion Regression
+
+on:
+  push:
+    paths:
+      - .github/workflows/trmnlp-completion-regression.yml
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Lint
+        run: |
+          printf '%s\n' '---' 'watch: false' 'custom_fields: {}' 'transform_runtime: disabled' > .trmnlp.yml
+          docker run --rm --pull always --volume "$PWD:/plugin" trmnl/trmnlp lint
+
+      - name: Test completion states
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa
+          views=(full half_horizontal half_vertical quadrant)
+
+          write_config() {
+            local mode="$1" completed="$2" items="$3"
+            {
+              echo "---"
+              echo "watch: false"
+              echo "custom_fields:"
+              echo "  list_title: QA Bucket"
+              echo "  display_mode: $mode"
+              echo "  show_completed: $completed"
+              echo "  max_items: 7"
+              echo "  bucket_items: |"
+              while IFS= read -r line; do printf '    %s\n' "$line"; done <<< "$items"
+              echo "transform_runtime: disabled"
+            } > .trmnlp.yml
+          }
+
+          start_preview() {
+            docker run --rm -d --name trmnlp-preview -p 4567:4567 -v "$PWD:/plugin" trmnl/trmnlp serve --bind 0.0.0.0
+            for n in $(seq 1 60); do
+              curl -fsS http://127.0.0.1:4567/data >/dev/null && return
+              sleep 1
+            done
+            docker logs trmnlp-preview
+            exit 1
+          }
+
+          stop_preview() { docker stop trmnlp-preview >/dev/null 2>&1 || true; }
+          trap stop_preview EXIT
+
+          all_done='[x] Done One | Test | Complete
+          [x] Done Two | Test | Complete'
+
+          write_config list false "$all_done"
+          start_preview
+          for view in "${views[@]}"; do
+            curl -fsS "http://127.0.0.1:4567/render/${view}.html" -o "qa/list-hidden-${view}.html"
+            grep -q "All items completed" "qa/list-hidden-${view}.html"
+            ! grep -q "Done One" "qa/list-hidden-${view}.html"
+          done
+
+          devices=(
+            "og|800|480|1|screen screen--og screen--md screen--density-1x screen--1bit"
+            "x|1872|1404|4|screen screen--v2 screen--lg screen--density-2x screen--4bit"
+          )
+          for spec in "${devices[@]}"; do
+            IFS='|' read -r device width height depth classes <<< "$spec"
+            for view in "${views[@]}"; do
+              curl -fsS --get --data-urlencode "screen_classes=$classes" --data-urlencode "width=$width" --data-urlencode "height=$height" --data-urlencode "color_depth=$depth" "http://127.0.0.1:4567/render/${view}.png" -o "qa/list-hidden-${device}-${view}.png"
+            done
+          done
+          stop_preview
+
+          write_config list true "$all_done"
+          start_preview
+          for view in "${views[@]}"; do
+            curl -fsS "http://127.0.0.1:4567/render/${view}.html" -o "qa/list-shown-${view}.html"
+            grep -q "Done One" "qa/list-shown-${view}.html"
+            grep -q "Done Two" "qa/list-shown-${view}.html"
+            ! grep -q "All items completed" "qa/list-shown-${view}.html"
+          done
+          stop_preview
+
+          mixed='[x] Done One | Test | Complete
+          [x] Done Two | Test | Complete
+          [x] Done Three | Test | Complete
+          [x] Done Four | Test | Complete
+          [ ] Open Five | Test | Pending'
+
+          write_config focus false "$mixed"
+          start_preview
+          for view in "${views[@]}"; do
+            curl -fsS "http://127.0.0.1:4567/render/${view}.html" -o "qa/focus-hidden-${view}.html"
+            grep -q "Open Five" "qa/focus-hidden-${view}.html"
+            ! grep -Eq "Done (One|Two|Three|Four)" "qa/focus-hidden-${view}.html"
+          done
+          stop_preview
+
+          write_config focus true "$mixed"
+          start_preview
+          for view in "${views[@]}"; do
+            seen_done=0
+            for n in $(seq 1 40); do
+              html=$(curl -fsS "http://127.0.0.1:4567/render/${view}.html")
+              if grep -Eq "Done (One|Two|Three|Four)" <<< "$html"; then seen_done=1; break; fi
+            done
+            test "$seen_done" -eq 1
+          done
+          stop_preview
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import struct
+          pngs=list(Path("qa").glob("*.png"))
+          assert len(pngs)==8, len(pngs)
+          for p in pngs:
+              b=p.read_bytes()
+              assert b[:8]==b"\x89PNG\r\n\x1a\n"
+              wh=struct.unpack(">II", b[16:24])
+              assert wh==((1872,1404) if "-x-" in p.name else (800,480)), (p,wh)
+              assert len(b)>1000
+          print("Completion regression passed for 4 layouts and 2 devices.")
+          PY
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: completion-regression
+          path: qa/
+          retention-days: 7
