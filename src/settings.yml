@@ -66,10 +66,9 @@ custom_fields:
   description: Focus shows one random open item. List shows several items.
   optional: true
 - keyname: show_completed
-  name: Show completed items?
+  name: Show completed items in lists?
   field_type: boolean
   default: true
-  description: Include completed items in both Focus and List modes.
   optional: true
 - keyname: max_items
   name: Max list items
