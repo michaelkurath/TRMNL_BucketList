@@ -26,6 +26,7 @@ MIXED = '\n'.join(f'[{"x" if i < 4 else " "}] {t} | Personal | Someday' for i, t
 ALL_DONE = MIXED.replace('[ ]', '[x]')
 TWELVE = '\n'.join(f'[ ] {t} | Personal | Someday' for t in TITLES)
 LONG = '\n'.join(f'[ ] {t} with family and friends on a memorable adventure | Experiences | Plan a relaxed weekend and make time to enjoy the journey' for t in TITLES)
+MANY = '\n'.join(f'[ ] Bucket item {i:02d} | Test | Overflow' for i in range(1, 31))
 OUT = Path('qa-artifacts')
 OUT.mkdir(exist_ok=True)
 CONFIG = Path('.trmnlp.yml')
@@ -115,7 +116,14 @@ try:
     for view in VIEWS:
         present = [t for t in TITLES if t in names(html(view))]
         assert present == TITLES[:3], present
-        checks.append(f'limit 3: {view}')
+            checks.append(f'limit 3: {view}')
+
+    start('list', True, MANY, limit=25)
+    for view in VIEWS:
+        body = html(view)
+        assert 'Bucket item 25' in body and 'Bucket item 26' not in body
+        checks.append(f'limit 25: {view}')
+    render('twentyfive', portrait=True)
 
     for name, items in [('five', MIXED), ('twelve', TWELVE), ('long', LONG)]:
         start('list', True, items)

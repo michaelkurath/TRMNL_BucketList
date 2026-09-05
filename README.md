@@ -9,7 +9,7 @@ An unofficial, open-source [TRMNL](https://trmnl.com/) recipe that keeps persona
 - Focus mode highlights one random eligible item (completed items are included when enabled)
 - List mode shows several open and completed items
 - Optional completed-item visibility
-- Configurable list length
+- Configurable list length of up to 100 eligible items
 - Full-screen, half-horizontal, half-vertical, and quadrant layouts
 - Static recipe with no external service or account dependency
 - Licensed for sharing and adaptation under CC BY 4.0
@@ -59,7 +59,7 @@ docker run --rm -v "$PWD:/plugin" trmnl/trmnlp lint
 python3 scripts/trmnlp_qa.py
 ```
 
-The GitHub Actions workflow runs the same tests when source or test files change. It checks toggle representations, empty/all-completed states, Focus mode, and item limits, and generates OG/X/portrait screenshots for 5-item, 12-item, and long-text lists. A test-only capture hook waits for `TRMNL_PLUGINS_READY` before TRMNLP captures the PNG and records visible-item geometry; the suite rejects rows outside the layout. This hook is not recipe markup and does not change the framework. Screenshot generation is followed by manual visual review; a green workflow does not itself certify visual quality. Artifacts remain available for 30 days.
+The GitHub Actions workflow runs the same tests when source or test files change. It checks toggle representations, empty/all-completed states, Focus mode, and item limits, and generates OG/X/portrait screenshots for 5-item, 12-item, 25-item, and long-text lists. A test-only capture hook waits for `TRMNL_PLUGINS_READY` before TRMNLP captures the PNG and records visible-item geometry; the suite rejects rows outside the layout. This hook is not recipe markup and does not change the framework. Screenshot generation is followed by manual visual review; a green workflow does not itself certify visual quality. Artifacts remain available for 30 days.
 
 Import the latest GitHub version into TRMNL before saving changes in its editor: exporting a stale TRMNL copy can overwrite newer repository templates.
 

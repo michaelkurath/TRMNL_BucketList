@@ -47,7 +47,7 @@ custom_fields:
 - keyname: bucket_items
   name: Bucket List Items
   field_type: text
-  rows: 12
+  rows: 20
   description: 'Format: [ ] Title | Category | Note (all parts optional). Examples: ''[ ] Learn Italian | Skills | Someday'' or just ''Read more books''. Use [x] for completed items.'
   default: |
     [ ] See the northern lights | Travel | Winter trip idea
@@ -75,10 +75,10 @@ custom_fields:
   name: Max list items
   field_type: number
   min: 3
-  max: 12
+  max: 100
   step: 1
   default: 7
-  description: Used in List mode.
+  description: Number of eligible items passed to List mode. Items that do not fit are summarized by the overflow counter.
   optional: true
 name: Bucket List
 description: Dreams and goals at a glance
