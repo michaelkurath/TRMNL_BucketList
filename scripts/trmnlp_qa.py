@@ -116,7 +116,7 @@ try:
     for view in VIEWS:
         present = [t for t in TITLES if t in names(html(view))]
         assert present == TITLES[:3], present
-            checks.append(f'limit 3: {view}')
+        checks.append(f'limit 3: {view}')
 
     start('list', True, MANY, limit=25)
     for view in VIEWS:
