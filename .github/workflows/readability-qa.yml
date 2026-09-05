@@ -1,7 +1,7 @@
 name: Bucket List TRMNLP QA
 on:
   push:
-    paths: ['src/**', 'scripts/trmnlp_qa.py', '.trmnlp.yml', '.github/workflows/readability-qa.yml']
+    paths: ['src/**', 'scripts/**', '.trmnlp.yml', '.github/workflows/readability-qa.yml']
   workflow_dispatch:
 permissions:
   contents: read

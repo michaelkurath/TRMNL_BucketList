@@ -41,7 +41,8 @@ def start(mode, show, items, limit=12):
         'list_title': 'Bucket List', 'display_mode': mode, 'show_completed': show,
         'bucket_items': items, 'max_items': limit}}))
     subprocess.run(['docker', 'run', '--rm', '-d', '--name', 'bucketlist-qa', '-p', '4567:4567',
-                    '-v', f'{Path.cwd()}:/plugin', 'trmnl/trmnlp', 'serve', '--bind', '0.0.0.0'], check=True)
+                    '-v', f'{Path.cwd()}:/plugin', '-e', 'RUBYOPT=-r/plugin/scripts/trmnlp_wait.rb',
+                    'trmnl/trmnlp', 'serve', '--bind', '0.0.0.0'], check=True)
     for _ in range(60):
         try:
             with urlopen('http://127.0.0.1:4567/data', timeout=2):
@@ -125,7 +126,10 @@ try:
             assert 'data-overflow-counter="true"' in body
             (OUT / f'{name}-{view}.html').write_text(body)
         render(name, portrait=True)
-    print(f'PASS: {len(checks)} semantic assertions; {len(list(OUT.glob("*.png")))} PNG renders')
+    geometry = [json.loads(line) for line in (OUT / 'geometry.jsonl').read_text().splitlines()]
+    clipped = [(g['screen'], g['view'], item) for g in geometry for item in g['items'] if item['clipped']]
+    assert not clipped, clipped
+    print(f'PASS: {len(checks)} semantic assertions; {len(list(OUT.glob("*.png")))} PNG renders; no out-of-bounds list items')
 finally:
     CONFIG.write_bytes(ORIGINAL)
     stop()
