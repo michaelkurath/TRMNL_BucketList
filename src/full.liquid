@@ -57,7 +57,7 @@
             {% assign item_name = parts[0] | strip | remove: "[ ]" | remove: "[x]" | remove: "[X]" | strip %}
             {% assign item_category = parts[1] | default: "Someday" | strip %}
             {% assign item_note = parts[2] | default: "" | strip %}
-            <div class="item"><div class="meta"><span class="index">{% if is_done %}x{% else %}-{% endif %}</span></div><div class="content"><span class="title lg:title--large w--full" data-clamp="2">{{ item_name }}</span><span class="description lg:description--large w--full" data-clamp="1">{{ item_category }}{% if item_note != "" %} | {{ item_note }}{% endif %}</span></div></div>
+            <div class="item"><div class="meta"><span class="index">{% if is_done %}x{% else %}-{% endif %}</span></div><div class="content"><span class="title lg:title--large w--full" data-clamp="1">{{ item_name }}</span><span class="description lg:description--large w--full" data-clamp="1">{{ item_category }}{% if item_note != "" %} | {{ item_note }}{% endif %}</span></div></div>
           {% endif %}
         {% endif %}
       {% endfor %}

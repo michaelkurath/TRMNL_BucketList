@@ -55,7 +55,7 @@
             {% assign displayed = displayed | plus: 1 %}
             {% assign parts = line | split: "|" %}
             {% assign item_name = parts[0] | strip | remove: "[ ]" | remove: "[x]" | remove: "[X]" | strip %}
-            <div class="item"><div class="meta"><span class="index">{% if is_done %}x{% else %}-{% endif %}</span></div><div class="content"><span class="title lg:title--large w--full" data-clamp="2">{{ item_name }}</span></div></div>
+            <div class="item"><div class="meta"><span class="index">{% if is_done %}x{% else %}-{% endif %}</span></div><div class="content"><span class="title lg:title--large w--full" data-clamp="1">{{ item_name }}</span></div></div>
           {% endif %}
         {% endif %}
       {% endfor %}
