@@ -6,7 +6,7 @@ An unofficial, open-source [TRMNL](https://trmnl.com/) recipe that keeps persona
 
 ## Features
 
-- Focus mode highlights one random open item
+- Focus mode highlights one random eligible item (completed items are included when enabled)
 - List mode shows several open and completed items
 - Optional completed-item visibility
 - Configurable list length
@@ -47,6 +47,21 @@ trmnlp serve
 ```
 
 Preview all four layouts and test both display modes before submitting changes. TRMNL layouts must not be nested; use flex, grid, or columns inside the outer `.layout` container.
+
+### Readability and regression tests
+
+List mode uses standard `title` and `description` sizes on OG, with `lg:title--large` and `lg:description--large` on X. Quadrants display item names only. The overflow engine uses the actual layout height; when the selected items cannot fit, an "and N more" counter is shown rather than shrinking the text. Long titles and descriptions are each clamped to one line so rows remain predictable across all view sizes.
+
+With Docker available, run from the repository root:
+
+```sh
+docker run --rm -v "$PWD:/plugin" trmnl/trmnlp lint
+python3 scripts/trmnlp_qa.py
+```
+
+The GitHub Actions workflow runs the same tests when source or test files change. It checks toggle representations, empty/all-completed states, Focus mode, and item limits, and generates OG/X/portrait screenshots for 5-item, 12-item, and long-text lists. A test-only capture hook waits for `TRMNL_PLUGINS_READY` before TRMNLP captures the PNG and records visible-item geometry; the suite rejects rows outside the layout. This hook is not recipe markup and does not change the framework. Screenshot generation is followed by manual visual review; a green workflow does not itself certify visual quality. Artifacts remain available for 30 days.
+
+Import the latest GitHub version into TRMNL before saving changes in its editor: exporting a stale TRMNL copy can overwrite newer repository templates.
 
 ## Contributing
 
