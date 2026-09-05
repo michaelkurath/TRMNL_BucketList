@@ -44,7 +44,7 @@
     {% if focus_count == 0 %}
       <div class="flex flex--col flex--center-x flex--center-y w--full h--full"><span class="value value--xlarge text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="130">All items completed</span></div>
     {% else %}
-      <div class="columns stretch-x w--full h--full" data-overflow="true" data-overflow-max-height="auto" data-overflow-max-cols="1" data-overflow-counter="true"><div class="column">
+      <div class="columns" data-overflow="true" data-overflow-max-height="auto" data-overflow-max-cols="1" data-overflow-counter="true"><div class="column">
       {% assign displayed = 0 %}
       {% for raw in lines %}
         {% assign line = raw | strip %}
