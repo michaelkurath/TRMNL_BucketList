@@ -1,7 +1,6 @@
 # TRMNLP's PNG capture waits for page/fonts, but not the asynchronous framework
 # layout pass. Wait for the framework's own completion flag before capturing.
 # Loaded only by the QA runner; never uploaded as recipe markup.
-require 'trmnlp/screenshot'
 require 'json'
 
 module BucketListReadyCapture
@@ -34,4 +33,12 @@ module BucketListReadyCapture
   end
 end
 
-TRMNLP::Screenshot.prepend(BucketListReadyCapture)
+# RUBYOPT loads this file before the trmnlp executable loads its application
+# classes. Attach the wrapper as soon as Screenshot finishes being defined.
+trace = TracePoint.new(:end) do
+  next unless defined?(TRMNLP::Screenshot)
+
+  TRMNLP::Screenshot.prepend(BucketListReadyCapture)
+  trace.disable
+end
+trace.enable
