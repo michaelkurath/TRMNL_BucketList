@@ -44,7 +44,7 @@
     {% if focus_count == 0 %}
       <div class="flex flex--col flex--center-x flex--center-y w--full h--full"><span class="value value--mega lg:value--tera text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="360">All items completed</span></div>
     {% else %}
-      <div class="grid grid--cols-2 portrait:grid--cols-1 gap stretch-x w--full">
+      <div class="columns stretch-x w--full" data-overflow="true" data-overflow-cols="2" data-overflow-cols-portrait="1" data-overflow-max-height="auto" data-overflow-counter="true"><div class="column">
       {% assign displayed = 0 %}
       {% for raw in lines %}
         {% assign line = raw | strip %}
@@ -57,11 +57,11 @@
             {% assign item_name = parts[0] | strip | remove: "[ ]" | remove: "[x]" | remove: "[X]" | strip %}
             {% assign item_category = parts[1] | default: "Someday" | strip %}
             {% assign item_note = parts[2] | default: "" | strip %}
-            <div class="item"><div class="meta"><span class="index">{% if is_done %}x{% else %}-{% endif %}</span></div><div class="content"><span class="title title--small">{{ item_name }}</span><span class="description description--small">{{ item_category }}{% if item_note != "" %} | {{ item_note }}{% endif %}</span></div></div>
+            <div class="item"><div class="meta"><span class="index">{% if is_done %}x{% else %}-{% endif %}</span></div><div class="content"><span class="title lg:title--large" data-clamp="2">{{ item_name }}</span><span class="description lg:description--large" data-clamp="1">{{ item_category }}{% if item_note != "" %} | {{ item_note }}{% endif %}</span></div></div>
           {% endif %}
         {% endif %}
       {% endfor %}
-      </div>
+      </div></div>
     {% endif %}
   {% else %}
     <div class="flex flex--col flex--center-x flex--center-y w--full h--full"><span class="value value--mega lg:value--tera text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="360">{% if focus_count == 0 %}All items completed{% else %}{{ focus_name }}{% endif %}</span></div>

@@ -44,7 +44,7 @@
     {% if focus_count == 0 %}
       <div class="flex flex--col flex--center-x flex--center-y w--full h--full"><span class="value value--xxxlarge text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="130">All items completed</span></div>
     {% else %}
-      <div class="columns stretch-x" data-overflow="true" data-overflow-max-height="140" data-overflow-max-cols="2" data-overflow-counter="false"><div class="column">
+      <div class="columns stretch-x" data-overflow="true" data-overflow-max-height="auto" data-overflow-max-cols="2" data-overflow-counter="true"><div class="column">
       {% assign displayed = 0 %}
       {% for raw in lines %}
         {% assign line = raw | strip %}
@@ -57,7 +57,7 @@
             {% assign item_name = parts[0] | strip | remove: "[ ]" | remove: "[x]" | remove: "[X]" | strip %}
             {% assign item_category = parts[1] | default: "Someday" | strip %}
             {% assign item_note = parts[2] | default: "" | strip %}
-            <div class="item"><div class="meta"><span class="index">{% if is_done %}x{% else %}-{% endif %}</span></div><div class="content"><span class="title title--small">{{ item_name }}</span><span class="description description--small">{{ item_category }}{% if item_note != "" %} | {{ item_note }}{% endif %}</span></div></div>
+            <div class="item"><div class="meta"><span class="index">{% if is_done %}x{% else %}-{% endif %}</span></div><div class="content"><span class="title lg:title--large" data-clamp="2">{{ item_name }}</span><span class="description lg:description--large" data-clamp="1">{{ item_category }}{% if item_note != "" %} | {{ item_note }}{% endif %}</span></div></div>
           {% endif %}
         {% endif %}
       {% endfor %}

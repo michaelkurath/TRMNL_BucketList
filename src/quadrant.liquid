@@ -44,7 +44,7 @@
     {% if focus_count == 0 %}
       <div class="flex flex--col flex--center-x flex--center-y w--full h--full"><span class="value value--xlarge text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="130">All items completed</span></div>
     {% else %}
-      <div class="columns stretch-x" data-overflow="true" data-overflow-max-height="140" data-overflow-max-cols="1" data-overflow-counter="false"><div class="column">
+      <div class="columns stretch-x" data-overflow="true" data-overflow-max-height="auto" data-overflow-max-cols="1" data-overflow-counter="true"><div class="column">
       {% assign displayed = 0 %}
       {% for raw in lines %}
         {% assign line = raw | strip %}
@@ -55,7 +55,7 @@
             {% assign displayed = displayed | plus: 1 %}
             {% assign parts = line | split: "|" %}
             {% assign item_name = parts[0] | strip | remove: "[ ]" | remove: "[x]" | remove: "[X]" | strip %}
-            <div class="item"><div class="meta"><span class="index">{% if is_done %}x{% else %}-{% endif %}</span></div><div class="content"><span class="description description--small">{{ item_name }}</span></div></div>
+            <div class="item"><div class="meta"><span class="index">{% if is_done %}x{% else %}-{% endif %}</span></div><div class="content"><span class="title lg:title--large" data-clamp="2">{{ item_name }}</span></div></div>
           {% endif %}
         {% endif %}
       {% endfor %}
