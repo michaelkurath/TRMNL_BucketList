@@ -6,9 +6,9 @@ An unofficial, open-source [TRMNL](https://trmnl.com/) recipe that keeps persona
 
 ## Features
 
-- Focus mode highlights one random eligible item (completed items are included when enabled)
+- Focus mode highlights one unfinished item each week, rotating on Monday in your TRMNL account timezone
 - List mode shows several open and completed items
-- Optional completed-item visibility
+- Optional completed-item visibility in List mode
 - Configurable list length of up to 100 eligible items
 - Full-screen, half-horizontal, half-vertical, and quadrant layouts
 - Static recipe with no external service or account dependency
@@ -24,7 +24,7 @@ Enter one item per line in the recipe settings:
 [ ] Visit Japan | Travel | Food, trains, design
 ```
 
-The category and note are optional. Use `[x]` for completed items and `[ ]` for open items. Plain titles also work.
+A plain title is enough. The optional third field shows as **Next step** in Focus and as a note in List. Leave the middle field blank to add a next step without a category. Use `[x]` for completed items and `[ ]` for unfinished items.
 
 ## Repository structure
 

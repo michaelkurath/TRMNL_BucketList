@@ -105,12 +105,24 @@ try:
     for view in VIEWS:
         assert TITLES[4] in html(view)
         checks.append(f'focus hidden: {view}')
-    # All-done + show is deterministic: no probabilistic random-pool assertion.
+    start('focus', True, MIXED)
+    for view in VIEWS:
+        body = html(view)
+        assert TITLES[4] in body and all(t not in body for t in TITLES[:4]), view
+        assert 'THIS WEEK' in body and 'Next step:</strong> Someday' in body, view
+        checks.append(f'focus unfinished with next step: {view}')
+
+    start('focus', True, 'Pizza night')
+    for view in VIEWS:
+        body = html(view)
+        assert 'Pizza night' in body and 'Next step:' not in body, view
+        checks.append(f'focus plain title: {view}')
+
     start('focus', True, ALL_DONE)
     for view in VIEWS:
         body = html(view)
-        assert any(t in body for t in TITLES[:5]) and 'All items completed' not in body
-        checks.append(f'focus completed eligible: {view}')
+        assert 'All items completed' in body and 'THIS WEEK' not in body, view
+        checks.append(f'focus all completed: {view}')
 
     start('list', True, TWELVE, limit=3)
     for view in VIEWS:
@@ -129,7 +141,8 @@ try:
         start('list', True, items)
         for view in VIEWS:
             body = html(view)
-            assert 'lg:title--large' in body
+            title_size = 'xxlarge' if view == 'full' else 'large'
+            assert f'lg:title--{title_size}' in body
             assert 'title title--small' not in body and 'description description--small' not in body
             assert 'data-overflow-counter="true"' in body
             (OUT / f'{name}-{view}.html').write_text(body)
