@@ -10,7 +10,7 @@
 {% if item_limit <= 0 %}{% assign item_limit = 7 %}{% endif %}
 {% assign total = 0 %}
 {% assign open = 0 %}
-{% assign pending_pool = "" %}
+{% assign open_positions = "" %}
 {% assign focus_count = 0 %}
 
 {% for raw in lines %}
@@ -19,22 +19,29 @@
     {% assign total = total | plus: 1 %}
     {% assign is_done = false %}
     {% if line contains "[x]" or line contains "[X]" %}{% assign is_done = true %}{% endif %}
-    {% unless is_done %}{% assign open = open | plus: 1 %}{% endunless %}
+    {% unless is_done %}
+      {% assign open = open | plus: 1 %}
+      {% assign open_positions = open_positions | append: forloop.index0 | append: "," %}
+    {% endunless %}
     {% if is_done == false or hide_completed == false %}
-      {% assign pending_pool = pending_pool | append: line | append: "||" %}
       {% assign focus_count = focus_count | plus: 1 %}
     {% endif %}
   {% endif %}
 {% endfor %}
 
-{% comment %}sample chooses a new open item whenever TRMNL renders the recipe.{% endcomment %}
-{% assign focus_line = pending_pool | split: "||" | sample | strip %}
-{% if focus_line == empty or focus_line == "" %}
-  {% assign focus_name = "Add your first item" %}
-{% else %}
-  {% assign focus_parts = focus_line | split: "|" %}
-  {% assign focus_name = focus_parts[0] | strip | remove: "[ ]" | remove: "[x]" | remove: "[X]" | strip %}
-{% endif %}
+{% unless mode contains "list" %}
+  {% if open > 0 %}
+    {% comment %}Unix time starts on a Thursday. Shift by three days to rotate on local Mondays.{% endcomment %}
+    {% assign local_seconds = "now" | date: "%s" | plus: trmnl.user.utc_offset %}
+    {% assign week_index = local_seconds | plus: 259200 | divided_by: 604800 | floor %}
+    {% assign focus_index = week_index | modulo: open %}
+    {% assign positions = open_positions | split: "," %}
+    {% assign line_index = positions[focus_index] | plus: 0 %}
+    {% assign focus_parts = lines[line_index] | split: "|" %}
+    {% assign focus_name = focus_parts[0] | remove: "[ ]" | strip %}
+    {% assign next_step = focus_parts[2] | default: "" | strip %}
+  {% endif %}
+{% endunless %}
 {% if mode contains "list" %}{% assign active_mode = "List" %}{% else %}{% assign active_mode = "Focus" %}{% endif %}
 
 <div class="layout layout--col layout--stretch{% if mode contains 'list' %} layout--top{% endif %}">
@@ -64,7 +71,17 @@
       </div></div>
     {% endif %}
   {% else %}
-    <div class="flex flex--col flex--center-x flex--center-y w--full h--full"><span class="value value--mega lg:value--tera text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="360">{% if focus_count == 0 %}All items completed{% else %}{{ focus_name }}{% endif %}</span></div>
+    <div class="flex flex--col flex--center-x flex--center-y gap w--full h--full">
+      {% if open == 0 %}
+        <span class="title lg:title--xxlarge text--center w--full">All items completed</span>
+      {% else %}
+        <span class="label lg:label--large">THIS WEEK</span>
+        <span class="value value--xxxlarge lg:value--mega text--center w--full" data-fit-value="true" data-value-fit="true" data-value-fit-max-height="245">{{ focus_name | escape }}</span>
+        {% if next_step != "" %}
+          <span class="description lg:description--large text--center w--full" data-clamp="2"><strong>Next step:</strong> {{ next_step | escape }}</span>
+        {% endif %}
+      {% endif %}
+    </div>
   {% endif %}
 </div>
 
